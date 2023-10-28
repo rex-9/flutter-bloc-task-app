@@ -20,9 +20,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
   void _onUpdateTaskEvent(UpdateTaskEvent event, Emitter<TasksState> emit) {
     final state = this.state;
     final eventTask = event.task;
-    final updatedTask = eventTask.isDone == false
-        ? eventTask.copyWith(isDone: true)
-        : eventTask.copyWith(isDone: false);
+    final updatedTask = eventTask.copyWith(isDone: !eventTask.isDone);
     final updatedTasks = state.tasks
         .map((task) => task.id == event.task.id ? updatedTask : task)
         .toList();
