@@ -5,7 +5,7 @@ import 'package:flutter_bloc_tasks/tasks/index.dart';
 part 'tasks_event.dart';
 part 'tasks_state.dart';
 
-class TasksBloc extends Bloc<TasksEvent, TasksState> {
+class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
   TasksBloc() : super(const TasksState()) {
     on<AddTaskEvent>(_onAddTaskEvent);
     on<UpdateTaskEvent>(_onUpdateTaskEvent);
@@ -42,5 +42,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         tasks: updatedTasks,
       ),
     );
+  }
+
+  @override
+  TasksState? fromJson(Map<String, dynamic> json) {
+    return TasksState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TasksState state) {
+    return state.toMap();
   }
 }

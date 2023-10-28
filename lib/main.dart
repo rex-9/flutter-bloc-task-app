@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_tasks/models/task.dart';
-import 'package:flutter_bloc_tasks/tasks/bloc/tasks_bloc.dart';
 import 'package:flutter_bloc_tasks/tasks/tasks_observer.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'screens/tasks_screen.dart';
+import 'tasks/index.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = TasksBlocObserver();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
   runApp(const MyApp());
 }
 
@@ -18,8 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          TasksBloc()..add(const AddTaskEvent(task: Task(title: 'Task 1'))),
+      create: (context) => TasksBloc(),
       child: MaterialApp(
         title: 'Flutter Tasks App',
         debugShowCheckedModeBanner: false,
