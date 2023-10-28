@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc_tasks/models/task.dart';
+import 'package:flutter_bloc_tasks/tasks/index.dart';
 
 class TaskListWidget extends StatelessWidget {
   const TaskListWidget({
@@ -20,8 +21,11 @@ class TaskListWidget extends StatelessWidget {
             title: Text(task.title),
             trailing: Checkbox(
               value: task.isDone,
-              onChanged: (value) {},
+              onChanged: (value) =>
+                  context.read<TasksBloc>().add(UpdateTaskEvent(task: task)),
             ),
+            onLongPress: () =>
+                context.read<TasksBloc>().add(DeleteTaskEvent(task: task)),
           );
         }),
       ),

@@ -17,7 +17,30 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     emit(TasksState(tasks: [...state.tasks, event.task]));
   }
 
-  void _onUpdateTaskEvent(UpdateTaskEvent event, Emitter<TasksState> emit) {}
+  void _onUpdateTaskEvent(UpdateTaskEvent event, Emitter<TasksState> emit) {
+    final state = this.state;
+    final eventTask = event.task;
+    final updatedTask = eventTask.isDone == false
+        ? eventTask.copyWith(isDone: true)
+        : eventTask.copyWith(isDone: false);
+    final updatedTasks = state.tasks
+        .map((task) => task.title == event.task.title ? updatedTask : task)
+        .toList();
+    emit(
+      TasksState(
+        tasks: updatedTasks,
+      ),
+    );
+  }
 
-  void _onDeleteTaskEvent(DeleteTaskEvent event, Emitter<TasksState> emit) {}
+  void _onDeleteTaskEvent(DeleteTaskEvent event, Emitter<TasksState> emit) {
+    final state = this.state;
+    final updatedTasks =
+        state.tasks.where((task) => task.title != event.task.title).toList();
+    emit(
+      TasksState(
+        tasks: updatedTasks,
+      ),
+    );
+  }
 }
